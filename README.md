@@ -10,3 +10,5 @@ Some notes about myself !
 #######>cn.tsplaycool.notes.utils-Utils-getVersionCode
 #####4.判断手机号码运营商
 #######>cn.tsplaycool.notes.utils-Utils-getSimOperator
+#####5.判断APP是否当日首次启动
+#######>cn.tsplaycool.notes.utils_Utils-isTodayFstLaunch

@@ -1,10 +1,15 @@
 package cn.tsplaycool.notes.utils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.telephony.TelephonyManager;
@@ -106,6 +111,30 @@ public class Utils {
 		} catch (Exception e) {
 		}
 		return subscriberId;
+	}
+
+	/**
+	 * 判断APP是否当日首次启动
+	 * 
+	 * @param context
+	 * @return
+	 */
+	public boolean isTodayFstLaunch(Context context) {
+		SharedPreferences sp = context.getSharedPreferences("Notes",
+				Context.MODE_PRIVATE);
+		String savedDate = sp.getString("key_today_date", "00000000");
+		Date date = new Date();
+		SimpleDateFormat formate = new SimpleDateFormat("yyyyMMdd",
+				Locale.SIMPLIFIED_CHINESE);
+		String currentDate = formate.format(date);
+		if (!currentDate.equals(savedDate)) {
+			Editor editor = sp.edit();
+			editor.putString("key_today_data", currentDate);
+			editor.commit();
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }
