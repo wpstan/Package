@@ -8,3 +8,5 @@ Some notes about myself !
 #######>cn.tsplaycool.notes.utils-ViewHolder
 #####3.获取某个应用的版本号
 #######>cn.tsplaycool.notes.utils-Utils-getVersionCode
+#####4.判断手机号码运营商
+#######>cn.tsplaycool.notes.utils-Utils-getSimOperator

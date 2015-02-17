@@ -7,6 +7,8 @@ import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.util.Log;
 
 /**
@@ -54,4 +56,56 @@ public class Utils {
 		}
 		return "0.0.0.0";
 	}
+
+	/**
+	 * 获取手机号码运营商
+	 * 
+	 * @param context
+	 * @return
+	 */
+	public static SimOperator getSimOperator(Context context) {
+		SimOperator simOperator;
+		String subscriberId = getSubscriberId(context);
+		if (TextUtils.isEmpty(subscriberId)) {
+			simOperator = SimOperator.UNKNOW;
+		} else {
+			// IMSI号前面3位460是国家，紧接着后面2位00 00,02,07是中国移动，<br>
+			// 01,06是中国联通，03, 05是中国电信,20铁通
+			if (subscriberId.startsWith("46001")
+					|| subscriberId.startsWith("46006")) {
+				simOperator = SimOperator.UNICOM;
+			} else if (subscriberId.startsWith("46000")
+					|| subscriberId.startsWith("46002")
+					|| subscriberId.startsWith("46007")) {
+				simOperator = SimOperator.MOBILE;
+			} else if (subscriberId.startsWith("46003")
+					|| subscriberId.startsWith("46005")) {
+				simOperator = SimOperator.TELECOM;
+			} else if (subscriberId.startsWith("46020")) {
+				simOperator = SimOperator.TIETONG;
+			} else {
+				simOperator = SimOperator.OTHER;
+			}
+		}
+		return simOperator;
+	}
+
+	// 不同手机号枚举
+	public enum SimOperator {
+		// 联通，移动，电线，铁通，其他，未知
+		UNICOM, MOBILE, TELECOM, TIETONG, OTHER, UNKNOW
+	}
+
+	// 获取sim卡的subscriber id
+	private static String getSubscriberId(Context context) {
+		String subscriberId = null;
+		try {
+			TelephonyManager telephonyManager = (TelephonyManager) context
+					.getSystemService(Context.TELEPHONY_SERVICE);
+			subscriberId = telephonyManager.getSubscriberId();
+		} catch (Exception e) {
+		}
+		return subscriberId;
+	}
+
 }
